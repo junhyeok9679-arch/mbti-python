@@ -3,14 +3,21 @@ import tkinter as tk
 from tkinter import messagebox
 from mbti_core import QUESTIONS, DISCLAIMER, DESCRIPTIONS, calculate_mbti
 
-class MBTIApp:
+from photo_ui import PhotoCardMixin
+
+class MBTIApp(PhotoCardMixin):
     def __init__(self, root):
         self.root = root
         self.root.title("MBTI 성향 체험 프로그램 (실습용)")
-        self.root.geometry("700x660")
+        self.root.geometry("760x820")
         self.root.resizable(True, True)
+        self.root.minsize(680, 780)
 
         self.current_index = 0
+        self.photo = None
+        self.card_image = None
+        self.photo_preview = None
+        self.result_preview = None
         self.answers = {} # {question_id: 'A' 또는 'B'} 저장 딕셔너리
 
         self.create_widgets()
@@ -77,6 +84,7 @@ class MBTIApp:
 
         self.btn_next = tk.Button(self.nav_frame, text="다음 ▶", font=("맑은 고딕", 10, "bold"), width=12, command=self.next_question, bg="#007bff", fg="white")
         self.btn_next.pack(side=tk.RIGHT)
+        self.add_photo_controls()
 
     def load_question(self):
         if self.current_index < len(QUESTIONS):
@@ -134,50 +142,11 @@ class MBTIApp:
             self.current_index -= 1
             self.load_question()
 
-    def show_result(self):
-        mbti_type, scores = calculate_mbti(self.answers)
-        desc = DESCRIPTIONS.get(mbti_type, "설명이 없습니다.")
-
-        # 기존 위젯 제거
-        for widget in self.content_frame.winfo_children():
-            widget.destroy()
-        if self.nav_frame.winfo_exists():
-            self.nav_frame.destroy()
-
-        # 결과 화면 구성
-        res_title = tk.Label(self.content_frame, text="응답 결과", font=("맑은 고딕", 16, "bold"), fg="#28a745")
-        res_title.pack(pady=(5, 5))
-
-        res_type_lbl = tk.Label(self.content_frame, text=f"당신의 체험용 MBTI 유형: 【 {mbti_type} 】", font=("맑은 고딕", 14, "bold"), fg="#007bff")
-        res_type_lbl.pack(pady=5)
-
-        # 점수 요약 영역
-        score_frame = tk.LabelFrame(self.content_frame, text=" 지표별 점수 요약 ", font=("맑은 고딕", 10, "bold"), padx=15, pady=8)
-        score_frame.pack(fill=tk.X, pady=10)
-
-        score_text = (
-            f"• 외향(E): {scores['E']} 점  vs  내향(I): {scores['I']} 점\n"
-            f"• 감각(S): {scores['S']} 점  vs  직관(N): {scores['N']} 점\n"
-            f"• 사고(T): {scores['T']} 점  vs  감정(F): {scores['F']} 점\n"
-            f"• 판단(J): {scores['J']} 점  vs  인식(P): {scores['P']} 점"
-        )
-        lbl_scores = tk.Label(score_frame, text=score_text, font=("맑은 고딕", 10), justify="left")
-        lbl_scores.pack(anchor="w")
-
-        # 해설 영역
-        desc_frame = tk.LabelFrame(self.content_frame, text=" 유형 해설 ", font=("맑은 고딕", 10, "bold"), padx=15, pady=8)
-        desc_frame.pack(fill=tk.BOTH, expand=True, pady=10)
-
-        lbl_desc = tk.Label(desc_frame, text=desc, font=("맑은 고딕", 10), wraplength=620, justify="left")
-        lbl_desc.pack(anchor="w", fill=tk.BOTH, expand=True)
-
-        # 다시 시작 버튼
-        btn_restart = tk.Button(self.content_frame, text="다시 시작하기 🔄", font=("맑은 고딕", 11, "bold"), bg="#6c757d", fg="white", command=self.restart)
-        btn_restart.pack(pady=10)
-
     def restart(self):
         self.current_index = 0
         self.answers.clear()
+        self.card_image = None
+        self.result_preview = None
         
         # 화면 초기화 후 재구성
         for widget in self.root.winfo_children():
