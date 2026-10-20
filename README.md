@@ -22,3 +22,8 @@ Python 3.9 환경에서 `python mbti_test.py` 또는 `python mbti_GUI.py`.
 ## 저장소
 
 https://github.com/junhyeok9679-arch/mbti-python
+
+
+## 코드 캡처 실습
+
+![VS Code CodeSnap으로 캡처한 hello.py](codesnap-hello.png)
