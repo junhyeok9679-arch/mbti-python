@@ -3,3 +3,9 @@ __pycache__/
 .conda/
 addbook.txt
 *.tmp
+
+# Machine-local editor settings and launch activation
+.vscode/
+
+
+.venv/

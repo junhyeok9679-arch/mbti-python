@@ -41,3 +41,28 @@ https://github.com/junhyeok9679-arch/mbti-python
 
 ![사진 없이 만든 결과 카드 예시](result-card-example.png)
 
+
+
+## 10월 21일 수업: Git clone 후 로컬 웹 서버
+
+`web_app.py`는 기존 질문·결과 카드 코드를 브라우저에서 실행합니다. Python 3.12 전용 환경 `myfirstProject`에서 `python -m pip install -r requirements-web.txt` 후 `python -m streamlit run web_app.py`로 실행합니다.
+
+이 PC에서는 `run-local.cmd`를 더블클릭하고 http://127.0.0.1:8501 을 엽니다. 사진과 답변은 이 컴퓨터의 서버에서만 처리합니다. 종료는 서버 창에서 Ctrl+C입니다. 기존 데스크톱 GUI는 `run.cmd`로 실행합니다.
+
+웹 서버 소스도 이 저장소에 포함되어 있습니다. 다른 컴퓨터에서는 아래 순서로 준비하세요.
+
+### 다른 컴퓨터에서 웹앱 실행
+
+Git과 Python 3.12를 설치한 뒤 터미널에서 실행합니다.
+
+```powershell
+git clone https://github.com/junhyeok9679-arch/mbti-python.git
+cd mbti-python
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-web.txt
+.\.venv\Scripts\python.exe -m streamlit run web_app.py
+```
+
+브라우저에서 http://127.0.0.1:8501 을 엽니다. 종료는 서버 터미널에서 Ctrl+C입니다.
+`run-local.cmd`는 이 수업 PC의 Miniconda 환경 `myfirstProject`용입니다.
+GitHub 웹페이지 자체에서는 Python 서버가 실행되지 않으며, 각 컴퓨터에서 실행해야 합니다.
